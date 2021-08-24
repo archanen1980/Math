@@ -8,10 +8,6 @@ public class GridObjInfo : MonoBehaviour
     public int numberValue;
     public TMP_Text textInfo;
 
-    private void Update()
-    {
-    }
-
     public void SetObjectInfo(int value)
     {
         numberValue = value;
@@ -20,11 +16,4 @@ public class GridObjInfo : MonoBehaviour
         textInfo.text = numberValue.ToString();
     }
 
-    void OnDrawGizmos()
-    {
-        Vector2 dirUp = transform.position + 1 * transform.up;
-        Vector2 startPosUp = new Vector2(transform.position.x, transform.position.y + .6f);
-
-        Gizmos.DrawLine(startPosUp, dirUp);
-    }
 }

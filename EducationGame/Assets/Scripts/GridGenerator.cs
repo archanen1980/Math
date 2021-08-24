@@ -7,9 +7,11 @@ public class GridGenerator : MonoBehaviour
     public int sizeX = 10;
     public int sizeY = 10;
 
-    public GameObject gridObjects;
+    public GameObject parentObj;
+    public GameObject gridObject;
+    public List<GameObject> gridObjects = new List<GameObject>();
 
-    private void Start()
+    private void Awake()
     {
         GenerateGrid();
     }
@@ -22,7 +24,10 @@ public class GridGenerator : MonoBehaviour
             {
                 int randGridObjValue = Random.Range(0, 9);
                 Vector2 gridPos = new Vector3(x, y);
-                GameObject newGridObj = Instantiate(gridObjects, gridPos, Quaternion.identity);
+                GameObject newGridObj = Instantiate(gridObject, gridPos, Quaternion.identity);
+                gridObjects.Add(newGridObj);
+                newGridObj.name = gridPos.ToString();
+                newGridObj.transform.parent = parentObj.transform;
 
                 newGridObj.GetComponent<GridObjInfo>().numberValue.ToString();
                 newGridObj.GetComponent<GridObjInfo>().SetObjectInfo(randGridObjValue);
