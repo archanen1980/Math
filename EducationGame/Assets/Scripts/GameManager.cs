@@ -10,6 +10,7 @@ public class GameManager : MonoBehaviour
     public GameObject value2;
     public GameObject answerValue;
     public GameObject operator1;
+    public int selectedAnswer;
     GameObject firstSelection;
     GameObject secondSelection;
     
@@ -22,41 +23,44 @@ public class GameManager : MonoBehaviour
         gridGeneratorScript = GameObject.FindObjectOfType<GridGenerator>();
 
         ChooseRandomNumbers();
-
-        
         ChooseEquation();
     }
 
     void ChooseEquation()
     {
-        randOperator = Random.Range(0, 4);
+        randOperator = Random.Range(0, 3);
 
-        if (randOperator == 0)
+        if (randOperator == 0) // Addition
         {
             operator1.GetComponent<TMP_Text>().text = "+";
 
             answerValue.GetComponent<GridObjInfo>().numberValue = firstSelection.GetComponent<GridObjInfo>().numberValue + secondSelection.GetComponent<GridObjInfo>().numberValue;
             answerValue.GetComponent<GridObjInfo>().SetObjectInfo(answerValue.GetComponent<GridObjInfo>().numberValue);
         }
-        else if (randOperator == 1)
+        else if (randOperator == 1) // Subtraction
         {
             operator1.GetComponent<TMP_Text>().text = "-";
 
             answerValue.GetComponent<GridObjInfo>().numberValue = firstSelection.GetComponent<GridObjInfo>().numberValue - secondSelection.GetComponent<GridObjInfo>().numberValue;
             answerValue.GetComponent<GridObjInfo>().SetObjectInfo(answerValue.GetComponent<GridObjInfo>().numberValue);
         }
-        else if (randOperator == 2)
+        else if (randOperator == 2) // Multiplication
         {
             operator1.GetComponent<TMP_Text>().text = "x";
 
             answerValue.GetComponent<GridObjInfo>().numberValue = firstSelection.GetComponent<GridObjInfo>().numberValue * secondSelection.GetComponent<GridObjInfo>().numberValue;
             answerValue.GetComponent<GridObjInfo>().SetObjectInfo(answerValue.GetComponent<GridObjInfo>().numberValue);
         }
+        else
+        {
+            return;
+        }
+        /*
         else if (randOperator == 3)
         {
             if (firstSelection.GetComponent<GridObjInfo>().numberValue == 0 || firstSelection.GetComponent<GridObjInfo>().numberValue == 0)
             {
-                ChooseEquation();
+                NewRound();
                 Debug.Log("Cannot divide by 0");
             }
             else
@@ -67,7 +71,7 @@ public class GameManager : MonoBehaviour
                 answerValue.GetComponent<GridObjInfo>().SetObjectInfo(answerValue.GetComponent<GridObjInfo>().numberValue);
             }
         }
-
+        */
     }
 
     void ChooseRandomNumbers()
@@ -117,5 +121,32 @@ public class GameManager : MonoBehaviour
 
         Debug.Log(firstSelection.GetComponent<GridObjInfo>().numberValue);
         Debug.Log(secondSelection.GetComponent<GridObjInfo>().numberValue);
+    }
+
+    public void SubmitSelections(int Selection1, int Selection2)
+    {
+        
+        if (randOperator == 0) // Addition
+        {
+            selectedAnswer = Selection1 + Selection2;
+        }
+        else if (randOperator == 1) // Subtraction
+        {
+            selectedAnswer = Selection1 - Selection2;
+        }
+        else if (randOperator == 2) // Multiplication
+        {
+            selectedAnswer = Selection1 * Selection2;
+        }
+        else
+        {
+            return;
+        }
+    }
+
+    public void NewRound()
+    {
+        ChooseRandomNumbers();
+        ChooseEquation();
     }
 }

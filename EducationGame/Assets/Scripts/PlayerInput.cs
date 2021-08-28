@@ -7,10 +7,9 @@ public class PlayerInput : MonoBehaviour
 {
     public GameObject markerObject;
     public int clickAmount = 0;
-
     GameManager gameManagerScript;
     GridObjInfo gridObjInfoScript;
-
+    
     public List<GameObject> selectedObj = new List<GameObject>();
 
     private void Start()
@@ -21,7 +20,17 @@ public class PlayerInput : MonoBehaviour
     private void Update()
     {
         DrawRayFromMouse();
+        DebugMode();
     }
+
+    void DebugMode()
+    {
+        if (Input.GetKeyUp(KeyCode.Space))
+        {
+            gameManagerScript.NewRound();
+        }
+    }
+
 
     void DrawRayFromMouse()
     {
@@ -82,6 +91,8 @@ public class PlayerInput : MonoBehaviour
                 gameManagerScript.value2.GetComponent<TMP_Text>().text = hit.transform.GetComponent<GridObjInfo>().numberValue.ToString();
                 clickAmount++;
             }
+            //gameManagerScript.SubmitSelections(selectedObj[0].GetComponent<GridObjInfo>().numberValue, selectedObj[1].GetComponent<GridObjInfo>().numberValue);
+
         }
     }
 }
