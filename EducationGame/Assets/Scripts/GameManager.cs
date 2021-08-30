@@ -13,14 +13,18 @@ public class GameManager : MonoBehaviour
     public int selectedAnswer;
     GameObject firstSelection;
     GameObject secondSelection;
-    
+    public static GameObject InstantiatedMarkerObject1;
+    public static GameObject InstantiatedMarkerObject2;
+
     public int randOperator;
 
     GridGenerator gridGeneratorScript;
+    PlayerInput playerInputScript;
 
     private void Start()
     {
         gridGeneratorScript = GameObject.FindObjectOfType<GridGenerator>();
+        playerInputScript = GameObject.FindObjectOfType<PlayerInput>();
 
         ChooseRandomNumbers();
         ChooseEquation();
@@ -76,7 +80,7 @@ public class GameManager : MonoBehaviour
 
     void ChooseRandomNumbers()
     {
-        int randSelection1 = Random.Range(0, gridGeneratorScript.gridObjects.Count + 1);
+        int randSelection1 = Random.Range(0, gridGeneratorScript.gridObjects.Count);
         firstSelection = gridGeneratorScript.gridObjects[randSelection1].transform.gameObject;
 
         Vector2 dirUp = gridGeneratorScript.gridObjects[randSelection1].transform.position + transform.up;
@@ -97,7 +101,7 @@ public class GameManager : MonoBehaviour
         RaycastHit2D hitLeft = Physics2D.Raycast(startPosLeft, dirLeft);
 
         int randSelection2 = Random.Range(0, 4);
-
+       
         if(randSelection2 == 0 && hitUp.transform != null)
         {
             secondSelection = hitUp.transform.gameObject;
@@ -119,34 +123,64 @@ public class GameManager : MonoBehaviour
             return;
         }
 
-        Debug.Log(firstSelection.GetComponent<GridObjInfo>().numberValue);
-        Debug.Log(secondSelection.GetComponent<GridObjInfo>().numberValue);
     }
 
-    public void SubmitSelections(int Selection1, int Selection2)
+    public void SubmitSelections()
     {
         
         if (randOperator == 0) // Addition
         {
-            selectedAnswer = Selection1 + Selection2;
+            selectedAnswer = int.Parse(value1.GetComponent<TMP_Text>().text) + int.Parse(value2.GetComponent<TMP_Text>().text);
         }
         else if (randOperator == 1) // Subtraction
         {
-            selectedAnswer = Selection1 - Selection2;
+            selectedAnswer = int.Parse(value1.GetComponent<TMP_Text>().text) - int.Parse(value2.GetComponent<TMP_Text>().text);
         }
         else if (randOperator == 2) // Multiplication
         {
-            selectedAnswer = Selection1 * Selection2;
+            selectedAnswer = int.Parse(value1.GetComponent<TMP_Text>().text) * int.Parse(value2.GetComponent<TMP_Text>().text);
         }
         else
         {
             return;
         }
+        CheckMath();
+    }
+
+    public void CheckMath()
+    {
+        if (selectedAnswer == answerValue.GetComponent<GridObjInfo>().numberValue)
+        {
+            Debug.Log(selectedAnswer);
+            Debug.Log(answerValue.GetComponent<GridObjInfo>().numberValue);
+            Debug.Log("Correct");
+        }
+        else if(selectedAnswer != answerValue.GetComponent<GridObjInfo>().numberValue)
+        {
+            Debug.Log(selectedAnswer);
+            Debug.Log(answerValue.GetComponent<GridObjInfo>().numberValue);
+            Debug.Log("Incorrect");
+        }
+
+        NewRound();
     }
 
     public void NewRound()
     {
+        PlayerInput.clickAmount = 0;
+        firstSelection = null;
+        secondSelection = null;
+        playerInputScript.selectedObj.Clear();
+
+        value1.GetComponent<TMP_Text>().text = "";
+        value2.GetComponent<TMP_Text>().text = "";
+
+        Destroy(InstantiatedMarkerObject1);
+        Destroy(InstantiatedMarkerObject2);
+
         ChooseRandomNumbers();
         ChooseEquation();
+        
+
     }
 }

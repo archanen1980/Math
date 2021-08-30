@@ -6,10 +6,11 @@ using TMPro;
 public class PlayerInput : MonoBehaviour
 {
     public GameObject markerObject;
-    public int clickAmount = 0;
-    GameManager gameManagerScript;
-    GridObjInfo gridObjInfoScript;
     
+
+    public static int clickAmount = 0;
+    GameManager gameManagerScript;
+   
     public List<GameObject> selectedObj = new List<GameObject>();
 
     private void Start()
@@ -40,7 +41,7 @@ public class PlayerInput : MonoBehaviour
         {
             if (clickAmount < 1)
             {
-                Instantiate(markerObject, hit.transform.position, Quaternion.identity);
+                GameManager.InstantiatedMarkerObject1 = Instantiate(markerObject, hit.transform.position, Quaternion.identity);
                 selectedObj.Add(hit.transform.gameObject);
                 gameManagerScript.value1.GetComponent<TMP_Text>().text = hit.transform.GetComponent<GridObjInfo>().numberValue.ToString();
                 clickAmount++;
@@ -66,22 +67,22 @@ public class PlayerInput : MonoBehaviour
 
                 if (selectedObj[0] != null && hitUp && hitUp.transform.gameObject == selectedObj[0])
                 {
-                    Instantiate(markerObject, hit.transform.position, Quaternion.identity);
+                    GameManager.InstantiatedMarkerObject2 = Instantiate(markerObject, hit.transform.position, Quaternion.identity);
                     selectedObj.Add(hit.transform.gameObject);
                 }
                 else if(selectedObj[0] != null && hitRight && hitRight.transform.gameObject == selectedObj[0] && selectedObj[0] != null)
                 {
-                    Instantiate(markerObject, hit.transform.position, Quaternion.identity);
+                    GameManager.InstantiatedMarkerObject2 = Instantiate(markerObject, hit.transform.position, Quaternion.identity);
                     selectedObj.Add(hit.transform.gameObject);
                 }
                 else if (selectedObj[0] != null && hitDown && hitDown.transform.gameObject == selectedObj[0] && selectedObj[0] != null)
                 {
-                    Instantiate(markerObject, hit.transform.position, Quaternion.identity);
+                    GameManager.InstantiatedMarkerObject2 = Instantiate(markerObject, hit.transform.position, Quaternion.identity);
                     selectedObj.Add(hit.transform.gameObject);
                 }
                 else if (selectedObj[0] != null && hitLeft && hitLeft.transform.gameObject == selectedObj[0] && selectedObj[0] != null)
                 {
-                    Instantiate(markerObject, hit.transform.position, Quaternion.identity);
+                    GameManager.InstantiatedMarkerObject2 = Instantiate(markerObject, hit.transform.position, Quaternion.identity);
                     selectedObj.Add(hit.transform.gameObject);
                 }
                 else
@@ -90,9 +91,8 @@ public class PlayerInput : MonoBehaviour
                 }
                 gameManagerScript.value2.GetComponent<TMP_Text>().text = hit.transform.GetComponent<GridObjInfo>().numberValue.ToString();
                 clickAmount++;
+                gameManagerScript.SubmitSelections();
             }
-            //gameManagerScript.SubmitSelections(selectedObj[0].GetComponent<GridObjInfo>().numberValue, selectedObj[1].GetComponent<GridObjInfo>().numberValue);
-
         }
     }
 }
